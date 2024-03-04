@@ -1,8 +1,8 @@
 import express from 'express';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import corsConfig from './../Config/cors.js';
-import { importRoutes } from './../Utils/routeHandler.js'
+import corsConfig from '../Middlewares/cors.js';
+import { importRoutes } from './../Config/routeHandler.js'
 
 dotenv.config({ path: '.env' });
 

@@ -1,7 +1,8 @@
-import express from 'express';
+import { Router } from 'express';
+import { createUser } from '../Controllers/user.controller.js';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', (req, res) => res.status(200).send('La operación se realizó con éxito pro'));
+router.post('/', createUser);
 
 export default router;
