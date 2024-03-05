@@ -2,7 +2,8 @@ import express from 'express';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import corsConfig from '../Middlewares/cors.js';
-import { importRoutes } from './../Config/routeHandler.js'
+import { importRoutes } from './../Config/routeHandler.js';
+import { rateLimitMiddleware } from '../Middlewares/rateLimiter.js';
 
 dotenv.config({ path: '.env' });
 
@@ -14,6 +15,7 @@ importRoutes(router);
 app
     .set('port', PORT)
     .use(corsConfig)
+    .use(rateLimitMiddleware)
     .use(express.json())
     .use(morgan('combined'))
     .use(router)
