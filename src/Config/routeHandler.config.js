@@ -1,6 +1,6 @@
-import { join, dirname } from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
-import { readdir } from 'fs/promises';
+import { join, dirname } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { readdir } from 'node:fs/promises';
 
 export const importRoutes = async (router) => {
     try {
@@ -15,6 +15,7 @@ export const importRoutes = async (router) => {
             const routeName = file.replace('.routes.js', '').toLowerCase();
 
             console.log(`✅ Route -> /api/v1/${routeName}`);
+
             router.use(`/api/v1/${routeName}`, routes);
         }));
 

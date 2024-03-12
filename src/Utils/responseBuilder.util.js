@@ -1,4 +1,4 @@
-// Función para construir una respuesta exitosa
+// Function to build a successful response
 const buildSuccessResponse = (message, data = null, status = 200) => ({
     success: true,
     status,
@@ -6,7 +6,7 @@ const buildSuccessResponse = (message, data = null, status = 200) => ({
     data
 });
 
-// Función para construir una respuesta de error
+//  Function to build an error response
 const buildErrorResponse = (message, data = null, status = 500) => ({
     success: false,
     status,
@@ -14,8 +14,8 @@ const buildErrorResponse = (message, data = null, status = 500) => ({
     data
 });
 
-// Función para enviar una respuesta estándar
-export async function sendStandardResponse(res, success, message, status = null, data = null) {
+// Function to send a standard response
+export const sendStandardResponse = async (res, success, message, status = null, data = null) => {
     const responseStatus = status || (success ? 200 : 500);
     const responseFunction = success ? buildSuccessResponse : buildErrorResponse;
     const responseObject = responseFunction(message, data, responseStatus);
@@ -23,4 +23,3 @@ export async function sendStandardResponse(res, success, message, status = null,
     res.status(responseStatus).json(responseObject);
     return responseObject;
 }
-

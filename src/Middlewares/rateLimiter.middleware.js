@@ -1,42 +1,43 @@
-import { dirname, join } from 'path';
-import { fileURLToPath  } from 'url';
-import { createWriteStream } from 'fs';
-import { sendStandardResponse } from '../Utils/responseBuilder.js';
+import { dirname, join } from 'node:path';
+import { fileURLToPath  } from 'node:url';
+import { createWriteStream } from 'node:fs';
+import { sendStandardResponse } from '../Utils/responseBuilder.util.js';
 
-// Ruta del archivo de registro de direcciones IP bloqueadas
+// Path to the blocked IP log file
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const blockedIPLogPath = join(__dirname, 'blocked_ip.log');
 
-// Objeto para realizar seguimiento de las solicitudes por dirección IP
+// Object to track requests by IP address
 const ipRequestTracker = {};
 
-// Middleware para el control de velocidad y bloqueo de IP
+// Middleware for rate limiting and IP blocking
 export const rateLimitMiddleware = (req, res, next) => {
     const { ip } = req;
     const currentTime = Date.now();
     const windowMs = 60 * 1000;
     const maxRequestsPerWindow = 20;
 
-    // Verificar y limpiar las solicitudes anteriores dentro de la ventana de tiempo
+    // Filter and clean up previous requests within the time window
     ipRequestTracker[ip] = ipRequestTracker[ip]?.filter(request => {
         return request.timestamp > currentTime - windowMs;
     }) || [];
 
-    // Verificar si el número de solicitudes dentro de la ventana de tiempo excede el límite
+    // Check if the number of requests within the time window exceeds the limit
     if (ipRequestTracker[ip].length >= maxRequestsPerWindow) {
-        // Bloquear la dirección IP y registrarla en el archivo de registro
+        // Block the IP address and log it to the file
         const blockedIPLogStream = createWriteStream(blockedIPLogPath, { flags: 'a' });
         blockedIPLogStream.write(`${ip} - ${new Date().toISOString()}\n`);
         blockedIPLogStream.end();
 
         console.log(`Blocked request from: ${ip}`);
-        // Enviar una respuesta de error si no se ha enviado ya una respuesta
+
+        // Send an error response if one has not been sent already
         if (!res.headersSent) {
             sendStandardResponse(res, false, 'Too Many Requests', 429);
         }
     }
 
-    // Registrar la nueva solicitud y continuar al siguiente middleware
+    // Record the new request and proceed to the next middleware
     ipRequestTracker[ip].push({ timestamp: currentTime });
     next();
 };

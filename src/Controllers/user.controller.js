@@ -1,14 +1,9 @@
-import { sendStandardResponse } from './../Utils/responseBuilder.js';
+import { sendStandardResponse } from '../Utils/responseBuilder.util.js';
 
-/**
-    * Get user(s).
-    * @param {Object} req - The request object.
-    * @param {Object} res - The response object.
-*/
-export async function getUser(req, res) {
+export const getUser = async (req, res) => {
     try {
         // Your code for getting user(s) goes here
-        
+
         // Example of sending success response with data
         const users = []; // Assuming you retrieve users from database or elsewhere
         sendStandardResponse(res, true, 'Users retrieved', 200, users);
@@ -19,16 +14,10 @@ export async function getUser(req, res) {
     }
 }
 
-/**
-    * Creates a new user.
-    * @param {Object} req - The request object.
-    * @param {Object} res - The response object.
-*/
-
-export async function createUser(req, res) {
+export const createUser = async (req, res) => {
     try {
         // Your code for creating a user goes here
-        
+
         // Example of sending success response
         if (!res.headersSent) {
             sendStandardResponse(res, true, 'User created', 201); // 201: Created
@@ -46,15 +35,10 @@ export async function createUser(req, res) {
     }
 }
 
-/**
-    * Update user.
-    * @param {Object} req - The request object.
-    * @param {Object} res - The response object.
-*/
-export async function updateUser(req, res) {
+export const updateUser = async (req, res) => {
     try {
         // Your code for updating user goes here
-        
+
         // Example of sending success response
         sendStandardResponse(res, true, 'User updated', 200);
 
@@ -64,12 +48,7 @@ export async function updateUser(req, res) {
     }
 }
 
-/**
-    * Delete user.
-    * @param {Object} req - The request object.
-    * @param {Object} res - The response object.
-*/
-export async function deleteUser(req, res) {
+export const deleteUser = async (req, res) => {
     try {
         // Your code for deleting user goes here
         
